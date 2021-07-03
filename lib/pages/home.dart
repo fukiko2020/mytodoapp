@@ -28,31 +28,45 @@ class _TodoListPageState extends State<TodoListPage> {
   // Todoリストのデータ
   final todoRepository = TodoRepository();
   List<TodoModel> todoList = [];
-  // List<TodoModel> get data => todoList;
+
+  Future<void> initializeTodoList() async {
+    print("in initializeTodoList");
+    todoList = await todoRepository.retrieve();
+    print(todoList);
+  }
 
   @override
   Widget build(BuildContext context) {
     debugPrint("todoList:" + todoList.toString());
-    todoRepository.retrieve().then((value) {
-      for (var i in value) {
-        todoList.add(i);
-        debugPrint("retrieve result:" + i.toString());
-      }
-    });
+
     return Scaffold(
       appBar: AppBar(
         title: Text('リスト一覧'),
       ),
       // データをもとにListViewを作成
-      body: ListView.builder(
-        itemCount: todoList.length,
-        itemBuilder: (context, index) {
-          return Card(
-            child: ListTile(
-              title: Text(todoList[index].content.toString()),
-            ),
-          );
-        },
+      body: Container(
+        padding: EdgeInsets.all(32),
+        child: FutureBuilder(
+          future: initializeTodoList(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              // 非同期処理未完了→ぐるぐる
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return ListView.builder(
+              itemCount: todoList.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  child: ListTile(
+                    title: Text(todoList[index].content.toString()),
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
