@@ -24,7 +24,7 @@ class _TodoAddPageState extends State<TodoAddPage> {
     debugPrint("in TodoAddPageState");
     return Scaffold(
         appBar: AppBar(
-          title: Text('リストを追加'),
+          title: Text('Todoを追加'),
         ),
         body: Container(
           padding: EdgeInsets.all(64),
@@ -59,7 +59,8 @@ class _TodoAddPageState extends State<TodoAddPage> {
                       id: id,
                       content: _text,
                     ));
-                    debugPrint("in onPressed before Navigator.of:" + newTodo.toString());
+                    debugPrint("in onPressed before Navigator.of:" +
+                        newTodo.toString());
                     Navigator.of(context).pop(newTodo);
                   },
                   child: Text('リストに追加', style: TextStyle(color: Colors.white)),

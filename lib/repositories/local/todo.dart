@@ -35,6 +35,7 @@ class TodoRepository {
       where: 'id = ?',
       whereArgs: [todo.id],
     );
+    return find(todo.id);
   }
 
   Future<void> delete(int id) async {
@@ -56,11 +57,10 @@ class TodoRepository {
     if (result.length > 0) {
       print("found:" + result.first.toString());
       return TodoModel(
-        id: result.first["id"], content: result.first["content"]
-      );
-    // } else {
-    //   print('not found');
-    //   return id;
+          id: result.first["id"], content: result.first["content"]);
+      // } else {
+      //   print('not found');
+      //   return id;
     }
   }
 }

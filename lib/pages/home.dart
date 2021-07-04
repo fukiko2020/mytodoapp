@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mytodoapp/models/todo.dart';
 import 'package:mytodoapp/pages/todo_add.dart';
+import 'package:mytodoapp/pages/todo_update.dart';
 import 'package:mytodoapp/repositories/local/todo.dart';
 
 class TodoHomePage extends StatelessWidget {
@@ -58,9 +59,37 @@ class _TodoListPageState extends State<TodoListPage> {
             return ListView.builder(
               itemCount: todoList.length,
               itemBuilder: (context, index) {
-                return Card(
-                  child: ListTile(
-                    title: Text(todoList[index].content.toString()),
+                print("item index:" + index.toString());
+                return InkWell(
+                  onTap: () async {
+                    final result = await Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return TodoUpdatePage(
+                            id: todoList[index].id,
+                            content: todoList[index].content);
+                      }),
+                    );
+                    if (result is int) {
+                      //resultは削除されたTodoのID
+                      setState(() {
+                        print("in setState at home.dart after delete");
+                        print("deleted:" + result.toString());
+                        todoList.removeWhere((item) => item.id == result);
+                      });
+                    } else if (result is TodoModel) {
+                      // resultは更新されたTodoそのもの
+                      setState(() {
+                        print("in setState at home.dart after update");
+                        todoList[index] = result;
+                      });
+                    } else {
+                      print("no update");
+                    }
+                  },
+                  child: Card(
+                    child: ListTile(
+                      title: Text(todoList[index].content.toString()),
+                    ),
                   ),
                 );
               },
