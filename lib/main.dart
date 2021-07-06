@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mytodoapp/controllers/todo_controller.dart';
+import 'package:provider/provider.dart';
 import 'package:mytodoapp/pages/home.dart';
 import 'package:mytodoapp/pages/todo_add.dart';
 import 'package:mytodoapp/pages/todo_update.dart';
@@ -15,14 +17,23 @@ void main() async {
 
 class MyTodoApp extends StatelessWidget {
   final int id = 0;
+  final todoController = TodoController();
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: {
-        HomeRoutes.home: (context) => TodoHomePage(),
-        HomeRoutes.add: (context) => TodoAddPage(id: id),
-        HomeRoutes.update: (context) => TodoUpdatePage(id: id, content: ''),
-      },
+    return ChangeNotifierProvider<TodoController>(
+      create: (context) => TodoController(),
+      child: MaterialApp(
+        routes: {
+          HomeRoutes.home: (context) => TodoHomePage(),
+          HomeRoutes.add: (context) => TodoAddPage(id: id, todoController: todoController,),
+          HomeRoutes.update: (context) => TodoUpdatePage(
+            id: id,
+            content: '',
+            todoController: todoController,
+          ),
+        },
+      ),
     );
   }
 }

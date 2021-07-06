@@ -1,26 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:mytodoapp/models/todo.dart';
-import 'package:mytodoapp/repositories/local/todo.dart';
+// import 'package:mytodoapp/repositories/local/todo.dart';
+import 'package:mytodoapp/controllers/todo_controller.dart';
 
 // リスト追加画面用Widget
-class TodoAddPage extends StatefulWidget {
+class TodoAddPage extends StatelessWidget {
   final int id;
-  TodoAddPage({required this.id});
+  final TodoController todoController;
+  TodoAddPage({required this.id, required this.todoController});
 
-  @override
-  _TodoAddPageState createState() => _TodoAddPageState(id: id);
-}
-
-class _TodoAddPageState extends State<TodoAddPage> {
-  // 入力されたテキストをデータとして持つ
-  String _text = '';
-  final todoRepository = TodoRepository();
-  final int id;
-  _TodoAddPageState({required this.id});
 
   // データをもとに表示するWidget
   @override
   Widget build(BuildContext context) {
+    String _text = '';
     debugPrint("in TodoAddPageState");
     return Scaffold(
         appBar: AppBar(
@@ -39,10 +32,10 @@ class _TodoAddPageState extends State<TodoAddPage> {
                 // 入力されたテキストの値を受け取る
                 onChanged: (String value) {
                   // データの変更を知らせる（画面更新）
-                  setState(() {
+                  // setState(() {
                     // データを変更
                     _text = value;
-                  });
+                  // });
                 },
               ),
               const SizedBox(height: 8),
@@ -55,13 +48,13 @@ class _TodoAddPageState extends State<TodoAddPage> {
                   onPressed: () {
                     // popで前の画面に戻る
                     // popの引数から前の画面にデータを渡す
-                    final newTodo = todoRepository.insert(TodoModel(
+                    todoController.insert(TodoModel(
                       id: id,
                       content: _text,
+                      isDone: false,
                     ));
-                    debugPrint("in onPressed before Navigator.of:" +
-                        newTodo.toString());
-                    Navigator.of(context).pop(newTodo);
+                    debugPrint("in onPressed before Navigator.of:");
+                    Navigator.of(context).pop();
                   },
                   child: Text('リストに追加', style: TextStyle(color: Colors.white)),
                 ),
