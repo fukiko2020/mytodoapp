@@ -4,8 +4,9 @@ import 'package:mytodoapp/repositories/local/todo.dart';
 
 class TodoController extends ChangeNotifier {
   List<TodoModel> _todoList = [];
-  List<TodoModel> get todoList => _todoList;
   bool _isDone = false;
+
+  List<TodoModel> get todoList => _todoList;
   bool get isDone => _isDone;
 
   TodoController();

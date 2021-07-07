@@ -16,7 +16,10 @@ class TodoHomePage extends StatelessWidget {
         primarySwatch: Colors.cyan,
       ),
       // リスト一覧画面を表示
-      home: TodoListPage(),
+      home: DefaultTabController(
+        length: 3,
+        child: TodoListPage(),
+      ),
     );
   }
 }
@@ -28,20 +31,40 @@ class TodoListPage extends StatelessWidget {
     print("in TodoListPage top");
     final TodoController todoController = context.watch<TodoController>();
     List<TodoModel> todoList = todoController.todoList;
+    int lastId = todoList.isNotEmpty ? todoList.last.id : 0;
+
+    List<TodoModel> isDoneList = [];
+    List<TodoModel> notDoneList = [];
+
+    for (var todo in todoList) {
+      todo.isDone == true ? isDoneList.add(todo) : notDoneList.add(todo);
+    }
+
     print("in TodoListPage");
     print("retrieved list:" + todoList.toString());
 
     return Scaffold(
       appBar: AppBar(
         title: Text('リスト一覧'),
+        bottom: TabBar(
+          tabs: [
+            Tab(text: "すべて"),
+            Tab(text: "未完了"),
+            Tab(text: "完了済み"),
+          ],
+        ),
       ),
-      body: TodoListView(
-        todoList: todoList,
-        todoController: todoController,
+      body: TabBarView(
+        children: [
+          TodoListView(todoList: todoList, todoController: todoController),
+          NotDoneListView(todoList: notDoneList,todoController: todoController),
+          IsDoneListView(todoList: isDoneList, todoController: todoController),
+        ],
       ),
+
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          print("todoList last id:" + todoList.last.id.toString());
+          print("todoList last id:" + lastId.toString());
           // pushで新規画面に遷移
           // リスト追加画面から渡される値を受け取る
           await Navigator.of(context).push(
@@ -49,7 +72,7 @@ class TodoListPage extends StatelessWidget {
               // 遷移先の画面をリスト追加画面に指定
 
               return TodoAddPage(
-                  id: todoList.last.id + 1, todoController: todoController);
+                  id: lastId + 1, todoController: todoController);
             }),
           );
           print("in onpressed");
@@ -108,4 +131,20 @@ class TodoListView extends StatelessWidget {
       },
     );
   }
+}
+
+class NotDoneListView extends TodoListView {
+  final List<TodoModel> todoList;
+  final TodoController todoController;
+
+  NotDoneListView({required this.todoList, required this.todoController})
+      : super(todoList: todoList, todoController: todoController);
+}
+
+class IsDoneListView extends TodoListView {
+  final List<TodoModel> todoList;
+  final TodoController todoController;
+
+  IsDoneListView({required this.todoList, required this.todoController})
+      : super(todoList: todoList, todoController: todoController);
 }

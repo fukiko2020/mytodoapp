@@ -21,7 +21,7 @@ class TodoRepository {
 
   Future<List<TodoModel>> retrieve() async {
     final List<Map<String, dynamic>> maps = await db.query('todo');
-    print("in retrieve");
+    print("in retrieve:repository");
     print(maps);
     return List.generate(maps.length, (i) {
       return TodoModel(
