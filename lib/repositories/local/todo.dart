@@ -5,7 +5,7 @@ import 'package:mytodoapp/repositories/local/local_db.dart';
 class TodoRepository {
   final db = LocalDB().instance;
 
-  insert(TodoModel todo) async {
+  Future<void> insert(TodoModel todo) async {
     await db.insert(
       'todo',
       todo.toMap(),
