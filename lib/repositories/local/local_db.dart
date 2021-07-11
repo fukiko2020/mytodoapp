@@ -12,9 +12,7 @@ class LocalDB {
 
   static Future<void> init() async {
     final databasesPath = await getDatabasesPath();
-    print("DB path:" + databasesPath);
     final path = p.join(databasesPath, 'local.db');
-    print("in init()");
     _db = await openDatabase(path, version: 2, onCreate: (db, version) async {
       await db.execute(
         _LocalDBTables.todo,
@@ -37,7 +35,7 @@ class _LocalDBTables {
     CREATE TABLE todo (
       id INTEGER PRIMARY KEY,
       content TEXT,
-      isDone INTEGER,
+      isDone INTEGER
     )
   ''';
 }

@@ -12,29 +12,23 @@ class TodoController extends ChangeNotifier {
   TodoController();
 
   Future<void> retrieve() async {
-    print("controller: in retrieve");
     _todoList = await TodoRepository().retrieve();
-    print(_todoList);
     notifyListeners();
   }
 
   Future<void> insert(TodoModel todo) async {
-    print("controller: in insert");
     await TodoRepository().insert(todo);
     _todoList = await TodoRepository().retrieve();
-    print(_todoList);
     notifyListeners();
   }
 
   Future<void> update(TodoModel todo) async {
-    print("controller: in update");
     await TodoRepository().update(todo);
     _todoList = await TodoRepository().retrieve();
     notifyListeners();
   }
 
   Future<void> delete(int id) async {
-    print("controller: in delete");
     await TodoRepository().delete(id);
     _todoList = await TodoRepository().retrieve();
     notifyListeners();
@@ -45,7 +39,6 @@ class TodoController extends ChangeNotifier {
     await TodoRepository()
         .update(TodoModel(id: id, content: todo.content, isDone: value));
     _todoList = await TodoRepository().retrieve();
-    print("in isdone setter");
     notifyListeners();
   }
 }

@@ -10,7 +10,6 @@ import 'package:mytodoapp/routes/home/routes.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocalDB.init();
-  debugPrint("DB initialized");
 
   runApp(MyTodoApp());
 }

@@ -8,7 +8,6 @@ import 'package:mytodoapp/controllers/todo_controller.dart';
 class TodoHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print("in TodoHomePage");
     return MaterialApp(
       // アプリ名
       title: 'My ToDo App',
@@ -28,7 +27,6 @@ class TodoHomePage extends StatelessWidget {
 class TodoListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print("in TodoListPage top");
     final TodoController todoController = context.watch<TodoController>();
     List<TodoModel> todoList = todoController.todoList;
     int lastId = todoList.isNotEmpty ? todoList.last.id : 0;
@@ -39,9 +37,6 @@ class TodoListPage extends StatelessWidget {
     for (var todo in todoList) {
       todo.isDone == true ? isDoneList.add(todo) : notDoneList.add(todo);
     }
-
-    print("in TodoListPage");
-    print("retrieved list:" + todoList.toString());
 
     return Scaffold(
       appBar: AppBar(
@@ -64,7 +59,6 @@ class TodoListPage extends StatelessWidget {
 
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          print("todoList last id:" + lastId.toString());
           // pushで新規画面に遷移
           // リスト追加画面から渡される値を受け取る
           await Navigator.of(context).push(
@@ -75,7 +69,6 @@ class TodoListPage extends StatelessWidget {
                   id: lastId + 1, todoController: todoController);
             }),
           );
-          print("in onpressed");
         },
         child: Icon(Icons.add),
       ),
@@ -91,15 +84,11 @@ class TodoListView extends StatelessWidget {
   TodoListView({required this.todoList, required this.todoController});
 
   Widget build(BuildContext context) {
-    print("in TodoListView:");
-    print(todoList);
     return ListView.builder(
       itemCount: todoList.length,
       itemBuilder: (context, index) {
-        print("item index:" + index.toString());
         return InkWell(
           onTap: () async {
-            print("inkwell! card tapped");
             await Navigator.of(context).push(
               MaterialPageRoute(builder: (context) {
                 return TodoUpdatePage(
@@ -118,7 +107,6 @@ class TodoListView extends StatelessWidget {
                   onChanged: (bool? value) {
                     todoController.setIsDone(todoList[index].id, value);
                     todoList[index].isDone = value;
-                    print("checkced");
                   }),
               Expanded(
                 child: ListTile(

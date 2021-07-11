@@ -37,7 +37,6 @@ class TodoUpdatePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("in TodoUpdatePage");
     final isDoneText = isDone! ? "未完了にする" : "完了済みにする";
     return Scaffold(
         appBar: AppBar(

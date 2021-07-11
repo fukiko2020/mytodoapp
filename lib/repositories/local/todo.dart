@@ -6,23 +6,15 @@ class TodoRepository {
   final db = LocalDB().instance;
 
   insert(TodoModel todo) async {
-    print("in insert");
-    try {
-      final newTodoId = await db.insert(
-        'todo',
-        todo.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-      print("newTodoId:" + newTodoId.toString());
-    } catch (e) {
-      print(e);
-    }
+    await db.insert(
+      'todo',
+      todo.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   Future<List<TodoModel>> retrieve() async {
     final List<Map<String, dynamic>> maps = await db.query('todo');
-    print("in retrieve:repository");
-    print(maps);
     return List.generate(maps.length, (i) {
       return TodoModel(
         id: maps[i]['id'],
@@ -33,18 +25,15 @@ class TodoRepository {
   }
 
   Future<void> update(TodoModel todo) async {
-    print("in update");
     await db.update(
       'todo',
       todo.toMap(),
       where: 'id = ?',
       whereArgs: [todo.id],
     );
-    print("finished update");
   }
 
   Future<void> delete(int id) async {
-    print("in delete");
     await db.delete(
       'todo',
       where: 'id = ?',
@@ -58,9 +47,7 @@ class TodoRepository {
       where: 'id = ?',
       whereArgs: [id],
     );
-    print('query result:' + result.toString());
     if (result.length > 0) {
-      print("found:" + result.first.toString());
       return TodoModel(
         id: result.first["id"],
         content: result.first["content"],
